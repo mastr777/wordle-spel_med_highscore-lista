@@ -1,8 +1,24 @@
 
-import './App.css'
+import { useEffect, useState } from "react";
 
 function App() {
-  return 'hello world';
+  const [word, setWord] = useState("");
+
+  useEffect(() => {
+    fetch("/api/word")
+      .then(res => res.json())
+      .then(data => setWord(data.word));
+  }, []);
+
+  return (
+    <div>
+      <h1>Wordle</h1>
+      <p>Word on server: {word}</p>
+    </div>
+  );
 }
 
-export default App
+export default App;
+
+
+
