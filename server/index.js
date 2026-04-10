@@ -7,12 +7,10 @@ const PORT = 5080;
 
 app.use(express.static(path.join(__dirname, "../wordle-game/dist")));
 
-
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../wordle-game/dist/index.html"));
 
 });
-
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
