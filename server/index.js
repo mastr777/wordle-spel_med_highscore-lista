@@ -18,21 +18,30 @@ app.listen(PORT, () => {
 
 });
 
+function uniqueLetters(word) {
+  return new Set(word).size === word.length;
+}
+
 app.get("/api/word", (req, res) => {
   const length = parseInt(req.query.length);
+  const unique = req.query.unique === "true";
 
-  let filteredWords = words;
+  let wordFiltering = words;
 
   if (!isNaN(length)) {
-    filteredWords = words.filter(word => word.length === length);
+    wordFiltering = wordFiltering.filter(word => word.length === length);
   }
 
-  if (filteredWords.length === 0) {
+  if (unique) {
+    wordFiltering = wordFiltering.filter(uniqueLetters);
+  }
+
+  if (wordFiltering.length === 0) {
     return res.status(400).json({ error: "No words found with that length" });
   }
 
-  const randomWord = Math.floor(Math.random() * filteredWords.length);
-  const word = filteredWords[randomWord];
+  const randomWord = Math.floor(Math.random() * wordFiltering.length);
+  const word = wordFiltering[randomWord];
 
   res.json({ word });
 
