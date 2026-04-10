@@ -1,3 +1,4 @@
+
 const express = require("express");
 const path = require("path");
 const words = require("./words");
@@ -18,9 +19,20 @@ app.listen(PORT, () => {
 });
 
 app.get("/api/word", (req, res) => {
+  const length = parseInt(req.query.length);
 
-  const randomWord = match.floor(Math.random() * words.length);
-  const word = words[randomWord];
+  let filteredWords = words;
+
+  if (!isNaN(length)) {
+    filteredWords = words.filter(word => word.length === length);
+  }
+
+  if (filteredWords.length === 0) {
+    return res.status(400).json({ error: "No words found with that length" });
+  }
+
+  const randomWord = Math.floor(Math.random() * filteredWords.length);
+  const word = filteredWords[randomWord];
 
   res.json({ word });
 
