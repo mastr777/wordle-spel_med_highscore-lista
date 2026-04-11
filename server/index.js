@@ -6,6 +6,7 @@ const words = require("./words");
 const app = express();
 const PORT = 5080;
 
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "../wordle-game/dist")));
 
 app.get("/", (req, res) => {
@@ -39,6 +40,18 @@ app.get("/api/word", (req, res) => {
   if (wordFiltering.length === 0) {
     return res.status(400).json({ error: "No words found with that length" });
   }
+
+app.post("/api/guess", (req, res) => {
+  const { guess, word } = req.body;
+
+  if (!guess || !word) {
+    return res.status(400).json({ error: "Guess and word are required" });
+  }
+  const isCorrect = guess.toLowerCase() === word.toLowerCase();
+
+  res.json({ isCorrect });
+  
+})
 
   const randomWord = Math.floor(Math.random() * wordFiltering.length);
   const word = wordFiltering[randomWord];
