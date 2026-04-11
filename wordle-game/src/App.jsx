@@ -8,7 +8,8 @@ function App() {
   const [unique, setUnique] = useState(true);
   const [result, setResult] = useState("");
   const [guess, setGuess] = useState("");
-  const [finalization, setFinalization] = useState([]);
+  /* const [finalization, setFinalization] = useState([]); */
+  const [guesses, setGuesses] = useState([]);
 
   const getWord = () => {
     fetch(`/api/word?length=${length}&unique=${unique}`)
@@ -18,14 +19,14 @@ function App() {
         setWord(data.word);
         setGuess("");
         setResult("");
-        setFinalization([]);
+        setGuesses([]);
       
       });
   };
 
   const submitGuess = () => {
     if (guess.length !== Number(length)) {
-      setResult("Guess must be ${length} letters");
+      setResult(`Guess must be ${length} letters`);
       setFinalization([]);
     }
 
@@ -43,7 +44,7 @@ function App() {
         }
 
         setResult(data.isCorrect ? "Correct!" : "Wrong word, try again");
-        setFinalization(data.finalization);
+        setGuesses(prev => [...prev, data.finalization]);
       })
 
       .catch(() => {
@@ -53,98 +54,125 @@ function App() {
   };
 
   return (
-
-    <main 
-    style={{ 
-      width: "100%",
-      minHeight: "700px",
-      height: "auto",
-      margin: "0 auto", 
-      color: "teal",
-      }}>
-
-    <div>
-      <h1 
-      style={{ 
-        paddingTop: "40px", 
-        color: "teal" 
-        }}>
-          Wordle</h1>
-
+    <main
+      style={{
+        width: "100%",
+        minHeight: "700px",
+        height: "auto",
+        margin: "0 auto",
+        color: "#5fa99c",
+      }}
+    >
       <div>
-        <span style={{ marginTop: "40px" }}>
-          Word length:
+        <h1
+          style={{
+            paddingTop: "40px",
+            color: "#5fa99c",
+          }}
+        >
+          Wordle
+        </h1>
+
+        <div>
+          <span style={{ marginTop: "40px" }}>
+            Word length:
+            <input
+              type="number"
+              value={length}
+              onChange={(e) => setLength(e.target.value)}
+            />
+          </span>
+        </div>
+
+        <div>
+          <p style={{ marginTop: "40px" }}>Choose type of word:</p>
+          <span>
+            Unique letters 'check':
+            <input
+              type="checkbox"
+              checked={unique}
+              onChange={(e) => setUnique(e.target.checked)}
+            />
+          </span>
+        </div>
+
+        <button style={{ marginTop: "40px" }} onClick={getWord}>
+          Start Game
+        </button>
+
+        {/* just for testing, against the Word */}
+        <p style={{ marginTop: "20px" }}>Word: {word}</p>
+
+        <div style={{ marginTop: "10px", marginBottom: "30px" }}>
           <input
-            type="number"
-            value={length}
-            onChange={(e) => setLength(e.target.value)}
+            type="text"
+            value={guess}
+            onChange={(e) => setGuess(e.target.value)}
+            placeholder="Guess Word"
           />
-        </span>
-      </div>
 
-      <div>
-        <p style={{ marginTop: "40px" }}>Choose type of word:</p>
-        <span>
-          Unique letters 'check':
-          <input
-            type="checkbox"
-            checked={unique}
-            onChange={(e) => setUnique(e.target.checked)}
-          />
-        </span>
-      </div>
+          <button onClick={submitGuess}>Guess</button>
+        </div>
 
-      <button style={{ marginTop: "40px" }} onClick={getWord}>
-        Start Game
-      </button>
+        <p style={{ display: "block", height: "50px", visibility: "visible" }}>
+          {result}
+        </p>
 
-      {/* just for testing, against the Word */}
-      <p style={{ marginTop: "20px" }}>Word: {word}</p>
-
-      <div style={{ marginTop: "10px", marginBottom: "30px" }}>
-        <input
-          type="text"
-          value={guess}
-          onChange={(e) => setGuess(e.target.value)}
-          placeholder="Guess Word"
-        />
-
-        <button onClick={submitGuess}>Guess</button>
-      </div>
-
-      <p style={{ display: "block", height: "50px", visibility: "visible" }}>{result}</p>
-
-      <div style={{ minWidth: "240px", width: "auto", minHeight: "60px", height: "auto", backgroundColor: "#1e2e32", margin: "0 auto" }}>
-          <div style={{ minWidth: "240px", width: "auto", display: "inline-flex", gap: "10px", marginTop: "10px" }}>
-
-        {finalization.map((item, index) => {
-          let bgColor = "lightgray";
-
-          if (item.status === "correct") bgColor = "green";
-          else if (item.status === "misplaced") bgColor = "gold";
-          else if (item.status === "incorrect") bgColor = "red";
-
-          return (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "60px",
+            height: "auto",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {guesses.map((guessRow, rowIndex) => (
             <div
-              key={index}
+              key={rowIndex}
               style={{
-                width: "40px",
-                height: "40px",
+                position: "relative",
+                minWidth: "300px",
+                maxWidth: "440px",
                 display: "flex",
+                flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: bgColor,
-                color: "white",
-                fontWeight: "bold",
+                gap: "11px",
+                marginTop: "16px",
               }}
             >
-              {item.letter}
+              {guessRow.map((item, index) => {
+                let bgColor = "lightgray";
+
+                if (item.status === "correct") bgColor = "#317f2a";
+                else if (item.status === "misplaced") bgColor = "#a6a629";
+                else if (item.status === "incorrect") bgColor = "#8f2424";
+
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: bgColor,
+                      color: "white",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item.letter}
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
-      </div>
-    </div>
     </main>
   );
 }
