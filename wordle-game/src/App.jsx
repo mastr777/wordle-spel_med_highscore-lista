@@ -86,6 +86,25 @@ function App() {
     };
   };
 
+  const saveScore = () => {
+    const data = getScoreData();
+
+    fetch("/api/highscore", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
+      })
+      .catch(() => {
+        console.log("Error saving score");
+      });
+  };
+
   return (
     <main
       style={{
@@ -163,6 +182,10 @@ function App() {
               onChange={e => setPlayerName(e.target.value)}
               placeholder="Type your name"
             />
+
+            <button onClick={saveScore} disabled={!playerName}>
+              Save score
+            </button>
           </div>
         )}
 
