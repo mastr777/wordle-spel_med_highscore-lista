@@ -1,6 +1,43 @@
 
 import { useState } from "react";
 
+const styles = {
+  page: {
+    minHeight: "100vh",
+    backgroundColor: "#0f171d",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  container: {
+    backgroundColor: "#161d23",
+    padding: "30px",
+    borderRadius: "10px",
+    width: "740px",
+    textAlign: "center",
+    color: "white"
+  },
+  input: {
+    width: "100%",
+    padding: "8px",
+    marginTop: "5px",
+    marginBottom: "10px",
+    borderRadius: "5px",
+    border: "none"
+  },
+  button: {
+    padding: "10px",
+    marginTop: "10px",
+    width: "100%",
+    borderRadius: "5px",
+    border: "none",
+    backgroundColor: "#4caf50",
+    color: "white",
+    fontWeight: "bold",
+    cursor: "pointer"
+  }
+};
+
 function App() {
 
   const [word, setWord] = useState("");
@@ -109,6 +146,8 @@ function App() {
   };
 
   return (
+  <div style={styles.page}>
+    <div style={styles.container}>
     <main
       style={{
         width: "100%",
@@ -121,26 +160,28 @@ function App() {
       <div>
         <h1
           style={{
-            paddingTop: "40px",
+            paddingTop: "30px",
             color: "#5fa99c",
+            letterSpacing: "0.02em"
           }}
         >
           Wordle
         </h1>
 
-        <div>
-          <span style={{ marginTop: "40px" }}>
+        <div style={{ marginTop: "70px" }}>
+          <span>
             Word length:
             <input
               type="number"
               value={length}
               onChange={(e) => setLength(e.target.value)}
+              style={{ marginLeft: "10px", fontSize: "15px", paddingLeft: "6px", padding: "2px", width: "70px" } }
             />
           </span>
         </div>
 
         <div>
-          <p style={{ marginTop: "40px" }}>Choose type of word:</p>
+          <p style={{ marginTop: "30px" }}>Choose type of word:</p>
           <span>
             Unique letters 'check':
             <input
@@ -151,22 +192,23 @@ function App() {
           </span>
         </div>
 
-        <button style={{ marginTop: "40px" }} onClick={getWord}>
+        <button style={{ marginTop: "60px", fontSize: "15px", letterSpacing: "0.02em" }} onClick={getWord}>
           Start Game
         </button>
 
         {/* just for testing, against the Word */}
 {/*         <p style={{ marginTop: "20px" }}>Word: {word}</p> */}
 
-        <div style={{ marginTop: "10px", marginBottom: "30px" }}>
+        <div style={{ marginTop: "20px", marginBottom: "30px" }}>
           <input
             type="text"
             value={guess}
-            onChange={(e) => setGuess(e.target.value)}
+            onChange={(e) => setGuess(e.target.value)} 
+            style={{ fontSize: "15px", paddingLeft: "6px", padding: "2px" } } 
             placeholder="Guess Word"
           />
 
-          <button onClick={submitGuess} disabled={gameEnd}>Guess</button>
+          <button onClick={submitGuess} disabled={gameEnd} style={{ marginLeft: "10px", fontSize: "15px", letterSpacing: "0.02em"  }}>Guess</button>
         </div>
 
         <p style={{ display: "block", height: "50px", visibility: "visible", margin: "0" }}>
@@ -263,6 +305,8 @@ function App() {
         </div>
       </div>
     </main>
+    </div>
+    </div>
   );
 }
 
