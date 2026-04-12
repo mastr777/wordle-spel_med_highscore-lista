@@ -16,6 +16,7 @@ function App() {
   const [elapsedTime, setElapsedTime] = useState(null);
 
   const [playerName, setPlayerName] = useState("");
+  const [scoreSaved, setScoreSaved] = useState(false);
 
   const getWord = () => {
     fetch(`/api/word?length=${length}&unique=${unique}`)
@@ -26,7 +27,7 @@ function App() {
         setGuess("");
         setResult("");
         setGuesses([]);
-        
+        setScoreSaved(false);
         setGameEnd(false);
         setStartTime(Date.now());
         setElapsedTime(null);
@@ -98,7 +99,9 @@ function App() {
     })
       .then((res) => res.json())
       .then((response) => {
-        console.log(response);
+        setResult("Score saved!");
+        setScoreSaved(true);
+        setPlayerName("");
       })
       .catch(() => {
         console.log("Error saving score");
@@ -153,7 +156,7 @@ function App() {
         </button>
 
         {/* just for testing, against the Word */}
-        <p style={{ marginTop: "20px" }}>Word: {word}</p>
+{/*         <p style={{ marginTop: "20px" }}>Word: {word}</p> */}
 
         <div style={{ marginTop: "10px", marginBottom: "30px" }}>
           <input
@@ -183,7 +186,7 @@ function App() {
               placeholder="Type your name"
             />
 
-            <button onClick={saveScore} disabled={!playerName}>
+            <button onClick={saveScore} disabled={!playerName || scoreSaved}>
               Save score
             </button>
           </div>
@@ -242,7 +245,7 @@ function App() {
                 );
               })}
 
-{gameEnd && playerName && (
+{/* {gameEnd && playerName && (
   <pre>
     {JSON.stringify(
       {
@@ -253,7 +256,7 @@ function App() {
       2
     )}
   </pre>
-)}
+)} */}
           
             </div>
           ))}
