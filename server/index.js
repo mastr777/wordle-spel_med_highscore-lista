@@ -82,7 +82,7 @@ app.post("/api/guess", (req, res) => {
   }
 
   if (guess.length !== word.length) {
-    return res.status(400).json({ error: "Guess must have the same length as the Word"});
+    return res.status(400).json({ error: "Guess must have the same length as the Word length"});
   }
 
   const lowerGuess = guess.toLowerCase();
