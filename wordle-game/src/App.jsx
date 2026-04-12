@@ -8,8 +8,9 @@ function App() {
   const [unique, setUnique] = useState(true);
   const [result, setResult] = useState("");
   const [guess, setGuess] = useState("");
-  /* const [finalization, setFinalization] = useState([]); */
   const [guesses, setGuesses] = useState([]);
+
+  const [gameEnd, setGameEnd] = useState(false);
 
   const getWord = () => {
     fetch(`/api/word?length=${length}&unique=${unique}`)
@@ -20,11 +21,16 @@ function App() {
         setGuess("");
         setResult("");
         setGuesses([]);
+        setGameEnd(false);
       
       });
   };
 
   const submitGuess = () => {
+    if (gameEnd) {
+      return;
+    }
+
     if (guess.length !== Number(length)) {
       setResult(`Guess must be ${length} letters`);
       setFinalization([]);
@@ -45,6 +51,10 @@ function App() {
 
         setResult(data.isCorrect ? "Correct!" : "Wrong word, try again");
         setGuesses(prev => [...prev, data.finalization]);
+
+        if (data.isCorrect) {
+          setGameEnd(true);
+        }
       })
 
       .catch(() => {
@@ -111,7 +121,7 @@ function App() {
             placeholder="Guess Word"
           />
 
-          <button onClick={submitGuess}>Guess</button>
+          <button onClick={submitGuess} disabled={gameEnd}>Guess</button>
         </div>
 
         <p style={{ display: "block", height: "50px", visibility: "visible" }}>
