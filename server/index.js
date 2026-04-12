@@ -18,6 +18,41 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../wordle-game/dist/index.html"));
 });
 
+app.get("/highscore", async (req, res) => {
+  try {
+    const highscores = await Highscore.find().sort({ timeMs: 1 }).limit(10);
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="UTF-8" />
+          <title>Highscores</title>
+        </head>
+        <body>
+          <h1 style=(color: "#5fa99c")>Highscore List</h1>
+          <ol>
+            ${highscores
+              .map(
+                score => `
+                  <li>
+                    ${score.name} - ${(score.timeMs / 1000).toFixed(1)} seconds
+                  </li>
+                `
+              )
+              .join("")}
+          </ol>
+        </body>
+      </html>
+    `;
+
+    res.send(html);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Failed to load highscores");
+  }
+});
+
 connectToDatabase()
   .then(() => {
     app.listen(PORT, () => {
@@ -27,10 +62,6 @@ connectToDatabase()
   .catch(error => {
     console.error("Database connection failed:", error);
   });
-
-/* app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-}); */
 
 function uniqueLetters(word) {
   return new Set(word).size === word.length;
