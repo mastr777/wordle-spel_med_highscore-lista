@@ -39,7 +39,7 @@ function App() {
     }
 
     if (guess.length !== Number(length)) {
-      setResult(`Guess must be ${length} letters`);
+      setResult(`The guess must be ${length} letters`);
       setFinalization([]);
     }
 
@@ -56,7 +56,7 @@ function App() {
           return;
         }
 
-        setResult(data.isCorrect ? "Correct!" : "Wrong word, try again");
+        setResult(data.isCorrect ? "Correct Word!" : "Wrong word, try again");
         setGuesses((prev) => [...prev, data.finalization]);
 
         if (data.isCorrect) {
@@ -136,12 +136,12 @@ function App() {
           <button onClick={submitGuess} disabled={gameEnd}>Guess</button>
         </div>
 
-        <p style={{ display: "block", height: "50px", visibility: "visible" }}>
+        <p style={{ display: "block", height: "50px", visibility: "visible", margin: "0" }}>
           {result}
         </p>
 
         {elapsedTime !== null && (
-          <p>Time: {(elapsedTime / 1000).toFixed(1)} seconds</p>
+          <p style={{ marginBottom: "20px", color: "gray" }}>Time: {(elapsedTime / 1000).toFixed(1)} seconds</p>
         )}
 
         <div
