@@ -15,6 +15,7 @@ function App() {
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(null);
 
+  const [playerName, setPlayerName] = useState("");
 
   const getWord = () => {
     fetch(`/api/word?length=${length}&unique=${unique}`)
@@ -73,6 +74,16 @@ function App() {
         setResult("Soemthing went wrong");
         setFinalization([]);
       });
+  };
+
+  const getScoreData = () => {
+    return {
+      name: playerName,
+      timeMs: elapsedTime,
+      guesses: guesses.map((row) => row.map((item) => item.letter).join("")),
+      wordLength: Number(length),
+      allowDuplicateLetters: !unique,
+    };
   };
 
   return (
@@ -144,6 +155,18 @@ function App() {
           <p style={{ marginBottom: "20px", color: "gray" }}>Time: {(elapsedTime / 1000).toFixed(1)} seconds</p>
         )}
 
+        {gameEnd && (
+          <div>
+            <input
+              type="text"
+              value={playerName}
+              onChange={e => setPlayerName(e.target.value)}
+              placeholder="Type your name"
+            />
+          </div>
+        )}
+
+
         <div
           style={{
             width: "100%",
@@ -195,6 +218,20 @@ function App() {
                   </div>
                 );
               })}
+
+{gameEnd && playerName && (
+  <pre>
+    {JSON.stringify(
+      {
+        ...getScoreData(),
+        timeSeconds: (getScoreData().timeMs / 1000).toFixed(1)
+      },
+      null,
+      2
+    )}
+  </pre>
+)}
+          
             </div>
           ))}
         </div>
