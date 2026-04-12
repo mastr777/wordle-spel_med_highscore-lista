@@ -1,3 +1,7 @@
+
+const Highscore = require("./Highscore");
+
+require("dotenv").config();
 const connectToDatabase = require("./db");
 
 const express = require("express");
@@ -108,10 +112,18 @@ app.get("/api/word", (req, res) => {
   res.json({ word });
 });
 
-app.post("/api/highscore", (req, res) => {
-  console.log(req.body);
-  res.json({ message: "Highscore received" });
+app.post("/api/highscore", async (req, res) => {
+  try {
+    const newScore = new Highscore(req.body);
+    await newScore.save();
+
+    res.json({ message: "Highscore saved" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to save highscore" });
+  }
 });
+
 
 
 
