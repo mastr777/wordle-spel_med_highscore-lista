@@ -266,7 +266,7 @@ app.get("/api/word", (req, res) => {
     const { guess, word } = req.body;
 
     if (!guess || !word) {
-      return res.status(400).json({ error: "A guess and a Word are required" });
+      return res.status(400).json({ error: "A guess of a Word is required" });
     }
 
     if (guess.length !== word.length) {
