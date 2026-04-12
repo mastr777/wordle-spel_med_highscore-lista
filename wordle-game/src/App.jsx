@@ -10,7 +10,11 @@ function App() {
   const [guess, setGuess] = useState("");
   const [guesses, setGuesses] = useState([]);
 
+  /* game End and Time variables */
   const [gameEnd, setGameEnd] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(null);
+
 
   const getWord = () => {
     fetch(`/api/word?length=${length}&unique=${unique}`)
@@ -21,7 +25,10 @@ function App() {
         setGuess("");
         setResult("");
         setGuesses([]);
+        
         setGameEnd(false);
+        setStartTime(Date.now());
+        setElapsedTime(null);
       
       });
   };
@@ -50,7 +57,12 @@ function App() {
         }
 
         setResult(data.isCorrect ? "Correct!" : "Wrong word, try again");
-        setGuesses(prev => [...prev, data.finalization]);
+        setGuesses((prev) => [...prev, data.finalization]);
+
+        if (data.isCorrect) {
+          setGameEnd(true);
+          setElapsedTime(Date.now() - startTime);
+        }
 
         if (data.isCorrect) {
           setGameEnd(true);
@@ -127,6 +139,10 @@ function App() {
         <p style={{ display: "block", height: "50px", visibility: "visible" }}>
           {result}
         </p>
+
+        {elapsedTime !== null && (
+          <p>Time: {(elapsedTime / 1000).toFixed(1)} seconds</p>
+        )}
 
         <div
           style={{
