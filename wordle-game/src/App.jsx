@@ -7,24 +7,27 @@ const styles = {
     backgroundColor: "#0f171d",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
+
   container: {
     backgroundColor: "#161d23",
     padding: "30px",
     borderRadius: "10px",
     width: "740px",
     textAlign: "center",
-    color: "white"
+    color: "white",
   },
+
   input: {
     width: "100%",
     padding: "8px",
     marginTop: "5px",
     marginBottom: "10px",
     borderRadius: "5px",
-    border: "none"
+    border: "none",
   },
+
   button: {
     padding: "10px",
     marginTop: "10px",
@@ -34,8 +37,41 @@ const styles = {
     backgroundColor: "#4caf50",
     color: "white",
     fontWeight: "bold",
-    cursor: "pointer"
+    cursor: "pointer",
+  },
+
+  link: {
+    color: "white",
+    marginRight: "15px",
+    textDecoration: "none",
+    fontWeight: "500",
+    letterSpacing: "0.02em"
+  },
+
+  grid: {
+    marginTop: "0",
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    alignItems: "center"
+  },
+  gridRow: {
+    display: "flex",
+    gap: "10px"
+  },
+  tile: {
+    width: "40px",
+    height: "40px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: "20px",
+    textTransform: "uppercase",
+    borderRadius: "4px"
   }
+
 };
 
 function App() {
@@ -54,6 +90,7 @@ function App() {
 
   const [playerName, setPlayerName] = useState("");
   const [scoreSaved, setScoreSaved] = useState(false);
+  const maxGuesses = 6;
 
   const getWord = () => {
     fetch(`/api/word?length=${length}&unique=${unique}`)
@@ -73,7 +110,10 @@ function App() {
   };
 
   const submitGuess = () => {
-    if (gameEnd) {
+    if (gameEnd) {return;}
+
+    if (guesses.length >= maxGuesses) {
+      setResult("No guesses left");
       return;
     }
 
@@ -95,21 +135,22 @@ function App() {
           return;
         }
 
+        const nextGuessCount = guesses.length + 1;
+
         setResult(data.isCorrect ? "Correct Word!" : "Wrong word, try again");
         setGuesses((prev) => [...prev, data.finalization]);
 
         if (data.isCorrect) {
           setGameEnd(true);
           setElapsedTime(Date.now() - startTime);
-        }
-
-        if (data.isCorrect) {
+        } else if (nextGuessCount >= maxGuesses) {
           setGameEnd(true);
+          setResult("Game over");
         }
       })
 
       .catch(() => {
-        setResult("Soemthing went wrong");
+        setResult("Something went wrong");
         setFinalization([]);
       });
   };
@@ -145,6 +186,17 @@ function App() {
       });
   };
 
+  const emptyRow = Array.from({ length: Number(length) }, () => ({
+    letter: "",
+    status: "empty",
+  }));
+
+  const gridRows = [...guesses];
+
+  while (gridRows.length < maxGuesses) {
+    gridRows.push(emptyRow);
+  }
+
   return (
   <div style={styles.page}>
     <div style={styles.container}>
@@ -160,7 +212,7 @@ function App() {
       <div>
         <h1
           style={{
-            paddingTop: "30px",
+            paddingTop: "20px",
             color: "#5fa99c",
             letterSpacing: "0.02em"
           }}
@@ -168,7 +220,13 @@ function App() {
           Wordle
         </h1>
 
-        <div style={{ marginTop: "70px" }}>
+        <nav style={{ marginBottom: "20px" }}>
+          <a href="/" style={styles.link}>Play</a>
+          <a href="/highscore" style={styles.link}>Highscore</a>
+          <a href="/about" style={styles.link}>About</a>
+        </nav>
+
+        <div style={{ marginTop: "50px" }}>
           <span>
             Word length:
             <input
@@ -197,7 +255,18 @@ function App() {
         </button>
 
         {/* just for testing, against the Word */}
-{/*         <p style={{ marginTop: "20px" }}>Word: {word}</p> */}
+        {/* {gameEnd && playerName && (
+          <pre>
+            {JSON.stringify(
+              {
+                ...getScoreData(),
+                timeSeconds: (getScoreData().timeMs / 1000).toFixed(1)
+              },
+              null,
+              2
+            )}
+          </pre>
+        )} */}
 
         <div style={{ marginTop: "20px", marginBottom: "30px" }}>
           <input
@@ -235,74 +304,42 @@ function App() {
         )}
 
 
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            minHeight: "60px",
-            height: "auto",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {guesses.map((guessRow, rowIndex) => (
-            <div
-              key={rowIndex}
-              style={{
-                position: "relative",
-                minWidth: "300px",
-                maxWidth: "440px",
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "11px",
-                marginTop: "16px",
-              }}
-            >
-              {guessRow.map((item, index) => {
-                let bgColor = "lightgray";
 
-                if (item.status === "correct") bgColor = "#317f2a";
-                else if (item.status === "misplaced") bgColor = "#a6a629";
-                else if (item.status === "incorrect") bgColor = "#8f2424";
+<div style={styles.grid}>
+  {gridRows.map((guessRow, rowIndex) => ( 
+    <div key={rowIndex} style={styles.gridRow}>
+      {guessRow.map((item, index) => {
+        let bgColor = "transparent";
+        let border = "2px solid #3a3a3c";
 
-                return (
-                  <div
-                    key={index}
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      backgroundColor: bgColor,
-                      color: "white",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {item.letter}
-                  </div>
-                );
-              })}
+        if (item.status === "correct") {
+          bgColor = "#538d4e";
+          border = "2px solid #538d4e";
+        } else if (item.status === "misplaced") {
+          bgColor = "#b59f3b";
+          border = "2px solid #b59f3b";
+        } else if (item.status === "incorrect") {
+          bgColor = "#3a3a3c";
+          border = "2px solid #3a3a3c";
+        }
 
-{/* {gameEnd && playerName && (
-  <pre>
-    {JSON.stringify(
-      {
-        ...getScoreData(),
-        timeSeconds: (getScoreData().timeMs / 1000).toFixed(1)
-      },
-      null,
-      2
-    )}
-  </pre>
-)} */}
-          
-            </div>
-          ))}
-        </div>
+        return (
+          <div
+            key={index}
+            style={{
+              ...styles.tile,
+              backgroundColor: bgColor,
+              border: border
+            }}
+          >
+            {item.letter}
+          </div>
+        );
+      })}
+    </div>
+  ))}
+</div>
+
       </div>
     </main>
     </div>
@@ -311,9 +348,5 @@ function App() {
 }
 
 export default App;
-
-
-
-
 
 
