@@ -1,17 +1,16 @@
-
 import { useState } from "react";
 
 const styles = {
   page: {
     width: "100%",
     minHeight: "100vh",
-    backgroundColor: "#0f171d",
+    backgroundColor: "#12191d",
     display: "flex",
-    justifyContent: "center",  
+    justifyContent: "center",
   },
 
   container: {
-    backgroundColor: "#1a2229",
+    backgroundColor: "#191f24",
     marginTop: "16px",
     padding: "5px",
     paddingBottom: "40px",
@@ -51,13 +50,14 @@ const styles = {
   },
 
   link: {
+    fontFamily: '"Lucida Console", "Courier New", monospace',
     color: "white",
-    marginRight: "18px",
+    marginRight: "26px",
     textDecoration: "none",
     fontSize: "17px",
     lineHeight: "135%",
-    fontWeight: "550",
-    letterSpacing: "0.03em"
+    fontWeight: "bold",
+    letterSpacing: "0.03em",
   },
 
   grid: {
@@ -65,11 +65,11 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     gap: "8px",
-    alignItems: "center"
+    alignItems: "center",
   },
   gridRow: {
     display: "flex",
-    gap: "10px"
+    gap: "10px",
   },
   tile: {
     width: "40px",
@@ -81,13 +81,11 @@ const styles = {
     fontWeight: "bold",
     fontSize: "20px",
     textTransform: "uppercase",
-    borderRadius: "4px"
-  }
-
+    borderRadius: "4px",
+  },
 };
 
 function App() {
-
   const [word, setWord] = useState("");
   const [length, setLength] = useState(5);
   const [unique, setUnique] = useState(true);
@@ -121,7 +119,6 @@ function App() {
     setGameStarted(false);
   };
 
-
   const getWord = () => {
     const numericLength = Number(length);
 
@@ -132,29 +129,29 @@ function App() {
 
     resetGameState();
 
-      fetch(`/api/word?length=${length}&unique=${unique}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            setResult(data.error);
-            return;
-          }
+    fetch(`/api/word?length=${length}&unique=${unique}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          setResult(data.error);
+          return;
+        }
 
-          setWord(data.word);
-          setGuess("");
-          setResult("");
-          setGuesses([]);
-          setGameEnd(false);
-          setHasWon(false);
-          setStartTime(Date.now());
-          setElapsedTime(null);
-          setScoreSaved(false);
-          setPlayerName("");
-          setGameStarted(true);
-        })
-        .catch(() => {
-          setResult("Something went wrong");
-        });
+        setWord(data.word);
+        setGuess("");
+        setResult("");
+        setGuesses([]);
+        setGameEnd(false);
+        setHasWon(false);
+        setStartTime(Date.now());
+        setElapsedTime(null);
+        setScoreSaved(false);
+        setPlayerName("");
+        setGameStarted(true);
+      })
+      .catch(() => {
+        setResult("Something went wrong");
+      });
   };
 
   const submitGuess = () => {
@@ -194,7 +191,6 @@ function App() {
           setGameEnd(true);
           setHasWon(true);
           setElapsedTime(Date.now() - startTime);
-
         } else if (nextGuessCount >= maxGuesses) {
           setGameEnd(true);
           setHasWon(false);
@@ -241,7 +237,7 @@ function App() {
 
   const emptyRow = Array.from({ length: safeLength }, () => ({
     letter: "",
-    status: "empty"
+    status: "empty",
   }));
 
   const gridRows = [...guesses];
@@ -249,76 +245,95 @@ function App() {
   while (gridRows.length < maxGuesses) {
     gridRows.push(emptyRow);
   }
-  
 
   return (
-  <div style={styles.page}>
-
-    <div style={styles.container}>
-
+    <div style={styles.page}>
+      <div style={styles.container}>
         <nav style={{ marginBottom: "20px", marginTop: "2px" }}>
-          <a href="/" style={styles.link}>Play</a>
-          <a href="/highscore" style={styles.link}>Highscore</a>
-          <a href="/about" style={styles.link}>About</a>
+          <a href="/" style={styles.link}>
+            Play
+          </a>
+          <a href="/highscore" style={styles.link}>
+            Highscore
+          </a>
+          <a href="/about" style={styles.link}>
+            About
+          </a>
         </nav>
 
-    <main
-      style={{
-        width: "100%",
-        minHeight: "700px",
-        height: "auto",
-        margin: "0 auto",
-        color: "#9adad9",
-      }}
-    >
-      <div>
-        <h1
+        <main
           style={{
-            color: "#82c9bc",
-            letterSpacing: "0.02em",
-            marginTop: "60px"
+            width: "100%",
+            minHeight: "700px",
+            height: "auto",
+            margin: "0 auto",
+            color: "#bbefed",
           }}
         >
-          Word<span style={{ color: "#56928c" }}>le</span>
-        </h1>
+          <div>
+            <h1
+              style={{
+                color: "#92d0d1",
+                letterSpacing: "0.03em",
+                marginTop: "80px",
+              }}
+            >
+              Word<span style={{ color: "#6ba29d" }}>le</span>
+            </h1>
 
+            <div style={{ marginTop: "50px" }}>
+              <span>
+                Choose Word length:
+                <input
+                  type="number"
+                  value={length}
+                  min="3"
+                  max="9"
+                  onChange={(e) => setLength(e.target.value)}
+                  style={{
+                    marginLeft: "10px",
+                    fontSize: "15px",
+                    paddingLeft: "6px",
+                    padding: "2px",
+                    width: "70px",
+                  }}
+                  disabled={gameStarted && !gameEnd}
+                />
+              </span>
+            </div>
 
+            <div style={{ marginTop: "20px" }}>
+              <p>
+                Type of <span style={{ fontWeight: "500" }}>Word</span>
+              </p>
+              <span>
+                Unique letters 'check'
+                <input
+                  type="checkbox"
+                  checked={unique}
+                  onChange={(e) => setUnique(e.target.checked)}
+                  disabled={gameStarted && !gameEnd}
+                  style={{ marginLeft: "10px" }}
+                />
+              </span>
+            </div>
 
-        <div style={{ marginTop: "50px" }}>
-          <span>
-            Choose Word length:
-            <input
-              type="number"
-              value={length} 
-              min="3" 
-              max="9" 
-              onChange={e => setLength(e.target.value)} 
-              style={{ marginLeft: "10px", fontSize: "15px", paddingLeft: "6px", padding: "2px", width: "70px" }} 
-              disabled={gameStarted && !gameEnd} 
-            />
-          </span>
-        </div>
+            <button
+              style={{
+                color: "orange",
+                marginTop: "60px",
+                fontSize: "14px",
+                letterSpacing: "0.04em",
+                padding: "4px",
+                fontWeight: "bold",
+              }}
+              onClick={getWord}
+            >
+              {gameStarted || gameEnd ? "New Game" : "Start Game"}
+            </button>
 
-        <div style={{ marginTop: "20px" }} >
-          <p>Type of <span style={{ fontWeight: "500" }}>Word</span></p>
-          <span>
-            Unique letters 'check'
-            <input
-              type="checkbox"
-              checked={unique}
-              onChange={(e) => setUnique(e.target.checked)} 
-              disabled={gameStarted && !gameEnd} 
-              style={{ marginLeft: "10px" }} 
-            />
-          </span>
-        </div>
-
-        <button style={{ marginTop: "60px", fontSize: "14px", letterSpacing: "0.04em", padding: "4px", fontWeight: "bold"}} onClick={getWord}>
-          {gameStarted || gameEnd ? "New Game" : "Start Game"} 
-        </button>
-
-        {/* just for testing, against the Word */}
-        {/* {gameEnd && playerName && (
+            {/* just for testing, against the Word */}
+            {/* {gameEnd && playerName && (
           <pre>
             {JSON.stringify(
               {
@@ -331,96 +346,117 @@ function App() {
           </pre>
         )} */}
 
-        <div style={{ marginTop: "20px", marginBottom: "10px" }}>
-          <input
-            type="text"
-            value={guess}
-            onChange={(e) => setGuess(e.target.value)} 
-            onKeyDown={e => {
-              if (e.key === "Enter" && !gameEnd) {
-                submitGuess();
-              }
-            }} 
-            style={{ fontSize: "15px", paddingLeft: "6px", padding: "2px" } } 
-            placeholder="Guess Word"
-            disabled={gameEnd} 
-          />
+            <div style={{ marginTop: "20px", marginBottom: "10px" }}>
+              <input
+                type="text"
+                value={guess}
+                onChange={(e) => setGuess(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !gameEnd) {
+                    submitGuess();
+                  }
+                }}
+                style={{ fontSize: "15px", paddingLeft: "6px", padding: "2px" }}
+                placeholder="Guess Word"
+                disabled={gameEnd}
+              />
 
-          <button onClick={submitGuess} disabled={gameEnd} style={{ marginLeft: "10px", fontSize: "14px", letterSpacing: "0.04em", padding: "4px", fontWeight: "bold" }}>
-            Guess</button>
-        </div>
+              <button
+                onClick={submitGuess}
+                disabled={gameEnd}
+                style={{
+                  color: "orange",
+                  marginLeft: "10px",
+                  fontSize: "14px",
+                  letterSpacing: "0.04em",
+                  padding: "4px",
+                  fontWeight: "bold",
+                }}
+              >
+                Guess
+              </button>
+            </div>
 
-        <p style={{ display: "block", height: "50px", visibility: "visible", margin: "0" }}>
-          {result}
-        </p>
+            <p
+              style={{
+                display: "block",
+                height: "50px",
+                visibility: "visible",
+                margin: "0",
+              }}
+            >
+              {result}
+            </p>
 
-        {elapsedTime !== null && (
-          <p style={{ marginBottom: "20px", color: "gray" }}>Time: {(elapsedTime / 1000).toFixed(1)} seconds</p>
-        )}
+            {elapsedTime !== null && (
+              <p style={{ marginBottom: "20px", color: "gray" }}>
+                Time: {(elapsedTime / 1000).toFixed(1)} seconds
+              </p>
+            )}
 
-        {hasWon && (
-          <div style={styles.winContainer}>
-            <input
-              type="text"
-              value={playerName}
-              onChange={e => setPlayerName(e.target.value)}
-              placeholder="Type your name" 
-              style={{ fontSize: "15px", paddingLeft: "6px", padding: "2px" } } 
-            />
+            {hasWon && (
+              <div style={styles.winContainer}>
+                <input
+                  type="text"
+                  value={playerName}
+                  onChange={(e) => setPlayerName(e.target.value)}
+                  placeholder="Type your name"
+                  style={{
+                    fontSize: "15px",
+                    paddingLeft: "6px",
+                    padding: "2px",
+                  }}
+                />
 
-            <button onClick={saveScore} disabled={!playerName || scoreSaved} style={styles.button}>
-              Save score
-            </button>
+                <button
+                  onClick={saveScore}
+                  disabled={!playerName || scoreSaved}
+                  style={styles.button}
+                >
+                  Save score
+                </button>
+              </div>
+            )}
+
+            <div style={styles.grid}>
+              {gridRows.map((guessRow, rowIndex) => (
+                <div key={rowIndex} style={styles.gridRow}>
+                  {guessRow.map((item, index) => {
+                    let bgColor = "transparent";
+                    let border = "2px solid #3a3a3c";
+
+                    if (item.status === "correct") {
+                      bgColor = "#538d4e";
+                      border = "2px solid #538d4e";
+                    } else if (item.status === "misplaced") {
+                      bgColor = "#b59f3b";
+                      border = "2px solid #b59f3b";
+                    } else if (item.status === "incorrect") {
+                      bgColor = "#3a3a3c";
+                      border = "2px solid #3a3a3c";
+                    }
+
+                    return (
+                      <div
+                        key={index}
+                        style={{
+                          ...styles.tile,
+                          backgroundColor: bgColor,
+                          border: border,
+                        }}
+                      >
+                        {item.letter}
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
           </div>
-        )}
-
-
-
-<div style={styles.grid}>
-  {gridRows.map((guessRow, rowIndex) => ( 
-    <div key={rowIndex} style={styles.gridRow}>
-      {guessRow.map((item, index) => {
-
-        let bgColor = "transparent";
-        let border = "2px solid #3a3a3c";
-
-        if (item.status === "correct") {
-          bgColor = "#538d4e";
-          border = "2px solid #538d4e";
-
-        } else if (item.status === "misplaced") {
-          bgColor = "#b59f3b";
-          border = "2px solid #b59f3b";
-
-        } else if (item.status === "incorrect") {
-          bgColor = "#3a3a3c";
-          border = "2px solid #3a3a3c";
-        }
-
-        return (
-          <div
-            key={index}
-            style={{
-              ...styles.tile,
-              backgroundColor: bgColor,
-              border: border
-            }}
-          >
-            {item.letter}
-          </div>
-        );
-      })}
-    </div>
-  ))}
-</div>
-
+        </main>
       </div>
-    </main>
-    </div>
     </div>
   );
 }
 
 export default App;
-
-
