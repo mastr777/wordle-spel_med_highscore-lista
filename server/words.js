@@ -1,4 +1,4 @@
-// list of different words - experimental test
+// list of 100+ different words
 const words = [
 
   "pear",
@@ -80,6 +80,34 @@ const words = [
   "piano",
   "statue",
   "dinosaur",
+  "tent",
+  "crystal",
+  "amethyst",
+  "cat",
+  "soil",
+  "developer",
+  "code",
+  "gun",
+  "icehockey",
+  "corn",
+  "popcorn",
+  "chair",
+  "house",
+  "garden",
+  "thrashcan",
+  "arm",
+  "book",
+  "tablet",
+  "mousepad",
+  "gold",
+  "schampoo",
+  "candy",
+  "time",
+  "sallad",
+  "clay",
+  "richochet",
+  "laugh",
+  "ragdoll",
 
 ];
 
