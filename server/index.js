@@ -332,7 +332,7 @@ app.get("/highscore", async (req, res) => {
             <p>Spelet fortsätter tills:</p>
               <ul>
                 <li>spelaren gissar rätt ord</li>
-                <li>eller max antal gissningar (5) är förbrukade</li>
+                <li>eller max antal gissningar (6) är förbrukade</li>
               </ul>
 
               <h2>Backend logik</h2>
