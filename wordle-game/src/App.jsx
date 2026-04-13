@@ -102,7 +102,7 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [playerName, setPlayerName] = useState("");
   const [scoreSaved, setScoreSaved] = useState(false);
-  const maxGuesses = 5;
+  const maxGuesses = 6;
 
   /* reset game */
   const resetGameState = () => {
