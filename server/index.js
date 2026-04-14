@@ -345,7 +345,7 @@ app.get("/highscore", async (req, res) => {
               tid (som millisekunder), alla gissningar, ordlängd och spelinställningar (icheck för dubbla bokstäver, eller inte).</p>
 
               <h2>Highscorelista</h2>
-              <p>Highscore-listan visas på en egen route (/highscore). Den sidan är serverside renderad, vilket innebär 
+              <p>Highscorelistan visas på en egen route (/highscore). Den sidan är serverside renderad, vilket innebär 
               att servern hämtar data från databasen, bygger upp HTML, och skickar en färdig sida ut till webbläsaren.</p>
 
               <h2>Informationssida</h2>
