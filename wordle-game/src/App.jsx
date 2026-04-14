@@ -10,7 +10,7 @@ const styles = {
   },
 
   container: {
-    backgroundColor: "#151618",
+    backgroundColor: "#111214",
     marginTop: "16px",
     padding: "5px",
     paddingBottom: "40px",
@@ -30,7 +30,7 @@ const styles = {
   },
 
   winContainer: {
-    marginBottom: "16px",
+    marginTop: "14px",
   },
 
   button: {
@@ -67,19 +67,21 @@ const styles = {
     gap: "8px",
     alignItems: "center",
   },
+
   gridRow: {
     display: "flex",
     gap: "10px",
   },
+  
   tile: {
-    width: "40px",
-    height: "40px",
+    width: "38px",
+    height: "38px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     color: "white",
     fontWeight: "bold",
-    fontSize: "20px",
+    fontSize: "19px",
     textTransform: "uppercase",
     borderRadius: "4px",
   },
@@ -88,10 +90,10 @@ const styles = {
     all: "unset",
     width: "110px",
     cursor: "pointer",
-    color: "#f1b96f",
-    marginTop: "60px",
+    color: "#ebd3b3",
+    marginTop: "50px",
     fontSize: "15px",
-    backgroundColor: "#3f1b1b",
+    backgroundColor: "#4b2a2a",
     border: "0",
     borderRadius: "4px",
     letterSpacing: "0.05em",
@@ -103,11 +105,11 @@ const styles = {
     all: "unset",
     width: "70px",
     cursor: "pointer",
-    color: "#b3c3c4",
+    color: "#c8b0b0",
     marginLeft: "10px",
-    marginTop: "60px",
+    marginTop: "50px",
     fontSize: "15px",
-    backgroundColor: "#3f1b1b",
+    backgroundColor: "#573e3e",
     border: "0",
     borderRadius: "4px",
     letterSpacing: "0.05em",
@@ -119,16 +121,28 @@ const styles = {
     all: "unset",
     width: "70px",
     cursor: "pointer",
-    color: "#f1b96f",
+    color: "#ebd3b3",
     marginLeft: "10px",
     fontSize: "15px",
-    backgroundColor: "#3f1b1b",
+    backgroundColor: "#4b2a2a",
     border: "0",
     borderRadius: "4px",
     letterSpacing: "0.05em",
     padding: "3px",
     fontWeight: "bold",
-  }
+  },
+
+  defaultWrapHeight: {
+    width: "100%",
+    height: "130px",
+    textAlign: "center",
+  },
+
+  finalTime: {
+    color: "white",
+    padding: "0",
+    marginTop: "4px",
+  },
 };
 
 function App() {
@@ -322,7 +336,8 @@ function App() {
             minHeight: "700px",
             height: "auto",
             margin: "0 auto",
-            color: "#dddddd",
+            color: "#bbcbcd",
+            letterSpacing: "0.02em",
           }}
         >
           <div>
@@ -330,7 +345,7 @@ function App() {
               style={{
                 color: "#a8e2e3",
                 letterSpacing: "0.03em",
-                marginTop: "80px",
+                marginTop: "60px",
               }}
             >
               Word<span style={{ color: "#79aeaa" }}>le</span>
@@ -350,19 +365,16 @@ function App() {
                     fontSize: "15px",
                     paddingLeft: "6px",
                     padding: "2px",
-                    width: "70px",
+                    width: "40px",
                   }}
                   disabled={gameStarted && !gameEnd}
                 />
               </span>
             </div>
 
-            <div style={{ marginTop: "20px" }}>
-{/*               <p>
-                Type of <span style={{ fontWeight: "500" }}>Word</span>
-              </p> */}
+            <div style={{ marginTop: "10px" }}>
               <span>
-                Unique <span style={{ fontWeight: "500" }}>Word</span> letters 'check'
+                Unique <span style={{ fontWeight: "500" }}>Word</span> letters '<span style={{ color: "#dddddd" }}>check</span>'
                 <input
                   type="checkbox"
                   checked={unique}
@@ -375,16 +387,16 @@ function App() {
 
             <button
               style={styles.buttonPrimaryOne}
-                onMouseEnter={(e) => (e.target.style.backgroundColor = "#502c2a")}
-                onMouseLeave={(e) => (e.target.style.backgroundColor = "#3f1b1b")}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = "#5c3b3a")}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = "#4b2a2a")}
               onClick={getWord}
             >
               {gameStarted || gameEnd ? "Retry @" : "Start Game"}
             </button>
             <button
               style={styles.buttonPrimaryOneSub}
-                onMouseEnter={(e) => (e.target.style.backgroundColor = "#502c2a")}
-                onMouseLeave={(e) => (e.target.style.backgroundColor = "#3f1b1b")}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = "#5c3b3a")}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = "#4b2a2a")}
               onClick={() => {
                 resetGameState();
                 }
@@ -392,10 +404,6 @@ function App() {
             >
               Reset
             </button>
-
-              {gameStarted && !gameEnd && (
-                <p style={{ marginTop: " 20px" }} >Time: {(currentTime / 1000).toFixed(1)} s</p>
-              )}
 
             {/* just for testing, against the Word */}
             {/* {gameEnd && playerName && (
@@ -411,7 +419,59 @@ function App() {
           </pre>
         )} */}
 
-            <div style={{ marginTop: "20px", marginBottom: "10px" }}>
+
+          <div style={styles.defaultWrapHeight}>
+
+              {gameStarted && !gameEnd && (
+                <p style={{ paddingTop: "10px", color: "white" }}>Time: {(currentTime / 1000).toFixed(1)} s</p>
+              )}
+
+            <p
+              style={{
+                display: "block",
+                height: "30px",
+                visibility: "visible",
+                paddingTop: "10px",
+              }}
+            >
+              {result}
+            </p>
+
+            {elapsedTime !== null && (
+              <p style={styles.finalTime}>
+                Time: {(elapsedTime / 1000).toFixed(1)} seconds
+              </p>
+            )}
+
+            {hasWon && (
+              <div style={styles.winContainer}>
+                <input
+                  type="text"
+                  value={playerName}
+                  onChange={(e) => setPlayerName(e.target.value)}
+                  placeholder="Type your name"
+                  style={{
+                    fontSize: "15px",
+                    padding: "4px",
+                    border: "solid 1px",
+                    borderColor: "#a8e2e3",
+                    outline: "none",
+                    borderRadius: "5px"
+                  }}
+                />
+
+                <button
+                  onClick={saveScore}
+                  disabled={!playerName || scoreSaved}
+                  style={styles.button}
+                >
+                  Save score
+                </button>
+              </div>
+            )}
+          </div>
+
+            <div style={{ marginBottom: "19px" }}>
               <input
                 type="text"
                 value={guess}
@@ -428,55 +488,14 @@ function App() {
 
               <button
                 style={styles.buttonPrimaryTwo}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#502c2a")}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#3f1b1b")}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#5c3b3a")}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#4b2a2a")}
                 onClick={submitGuess}
                 disabled={!isGameActive}
               >
                 Guess
               </button>
             </div>
-
-            <p
-              style={{
-                display: "block",
-                height: "50px",
-                visibility: "visible",
-                margin: "0",
-              }}
-            >
-              {result}
-            </p>
-
-            {elapsedTime !== null && (
-              <p style={{ marginBottom: "20px", color: "gray" }}>
-                Time: {(elapsedTime / 1000).toFixed(1)} seconds
-              </p>
-            )}
-
-            {hasWon && (
-              <div style={styles.winContainer}>
-                <input
-                  type="text"
-                  value={playerName}
-                  onChange={(e) => setPlayerName(e.target.value)}
-                  placeholder="Type your name"
-                  style={{
-                    fontSize: "15px",
-                    paddingLeft: "6px",
-                    padding: "2px",
-                  }}
-                />
-
-                <button
-                  onClick={saveScore}
-                  disabled={!playerName || scoreSaved}
-                  style={styles.button}
-                >
-                  Save score
-                </button>
-              </div>
-            )}
 
             <div style={styles.grid}>
               {gridRows.map((guessRow, rowIndex) => (
