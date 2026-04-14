@@ -155,7 +155,7 @@ app.get("/highscore", async (req, res) => {
         }
 
         h1 {
-          margin-top: 90px;
+          margin-top: 80px;
           margin-bottom: 70px;
           font-size: 34px;
           font-weight: bold;
@@ -258,7 +258,7 @@ app.get("/highscore", async (req, res) => {
         }
 
         h1 {
-          margin-top: 90px;
+          margin-top: 80px;
           margin-bottom: 70px;
           font-size: 34px;
           font-weight: bold;
