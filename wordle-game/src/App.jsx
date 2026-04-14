@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const styles = {
   page: {
     width: "100%",
     minHeight: "100vh",
-    backgroundColor: "#12191d",
+    backgroundColor: "#191f24",
     display: "flex",
     justifyContent: "center",
   },
 
   container: {
-    backgroundColor: "#191f24",
+    backgroundColor: "#151618",
     marginTop: "16px",
     padding: "5px",
     paddingBottom: "40px",
@@ -83,6 +83,52 @@ const styles = {
     textTransform: "uppercase",
     borderRadius: "4px",
   },
+
+  buttonPrimaryOne: {
+    all: "unset",
+    width: "110px",
+    cursor: "pointer",
+    color: "#f1b96f",
+    marginTop: "60px",
+    fontSize: "15px",
+    backgroundColor: "#3f1b1b",
+    border: "0",
+    borderRadius: "4px",
+    letterSpacing: "0.05em",
+    padding: "3px",
+    fontWeight: "bold",
+  },
+
+  buttonPrimaryOneSub: {
+    all: "unset",
+    width: "70px",
+    cursor: "pointer",
+    color: "#b3c3c4",
+    marginLeft: "10px",
+    marginTop: "60px",
+    fontSize: "15px",
+    backgroundColor: "#3f1b1b",
+    border: "0",
+    borderRadius: "4px",
+    letterSpacing: "0.05em",
+    padding: "3px",
+    fontWeight: "bold",
+  },
+
+  buttonPrimaryTwo: {
+    all: "unset",
+    width: "70px",
+    cursor: "pointer",
+    color: "#f1b96f",
+    marginLeft: "10px",
+    fontSize: "15px",
+    backgroundColor: "#3f1b1b",
+    border: "0",
+    borderRadius: "4px",
+    letterSpacing: "0.05em",
+    padding: "3px",
+    fontWeight: "bold",
+  }
 };
 
 function App() {
@@ -102,7 +148,20 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [playerName, setPlayerName] = useState("");
   const [scoreSaved, setScoreSaved] = useState(false);
-  const maxGuesses = 6;
+  const [currentTime, setCurrentTime] = useState(0);
+  const maxGuesses = 5;
+
+
+  useEffect(() => {
+    if (!gameStarted || gameEnd || !startTime) return;
+
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now() - startTime);
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [gameStarted, gameEnd, startTime]);
+
 
   /* reset game */
   const resetGameState = () => {
@@ -122,14 +181,15 @@ function App() {
   const getWord = () => {
     const numericLength = Number(length);
 
-    if (numericLength < 3 || numericLength > 9) {
+    if (!numericLength || numericLength < 3 || numericLength > 9) {
       setResult("Word length must be between 3 and 9");
       return;
     }
 
+    // reset gameplay but not settings
     resetGameState();
 
-    fetch(`/api/word?length=${length}&unique=${unique}`)
+    fetch(`/api/word?length=${numericLength}&unique=${unique}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
@@ -138,16 +198,9 @@ function App() {
         }
 
         setWord(data.word);
-        setGuess("");
-        setResult("");
-        setGuesses([]);
-        setGameEnd(false);
-        setHasWon(false);
-        setStartTime(Date.now());
-        setElapsedTime(null);
-        setScoreSaved(false);
-        setPlayerName("");
         setGameStarted(true);
+        setStartTime(Date.now());
+
       })
       .catch(() => {
         setResult("Something went wrong");
@@ -246,6 +299,8 @@ function App() {
     gridRows.push(emptyRow);
   }
 
+  const isGameActive = gameStarted && !gameEnd;
+
   return (
     <div style={styles.page}>
       <div style={styles.container}>
@@ -267,23 +322,23 @@ function App() {
             minHeight: "700px",
             height: "auto",
             margin: "0 auto",
-            color: "#bbefed",
+            color: "#dddddd",
           }}
         >
           <div>
             <h1
               style={{
-                color: "#92d0d1",
+                color: "#a8e2e3",
                 letterSpacing: "0.03em",
                 marginTop: "80px",
               }}
             >
-              Word<span style={{ color: "#6ba29d" }}>le</span>
+              Word<span style={{ color: "#79aeaa" }}>le</span>
             </h1>
 
             <div style={{ marginTop: "50px" }}>
               <span>
-                Choose Word length:
+                Choose <span style={{ fontWeight: "500" }}>Word</span> length:
                 <input
                   type="number"
                   value={length}
@@ -303,11 +358,11 @@ function App() {
             </div>
 
             <div style={{ marginTop: "20px" }}>
-              <p>
+{/*               <p>
                 Type of <span style={{ fontWeight: "500" }}>Word</span>
-              </p>
+              </p> */}
               <span>
-                Unique letters 'check'
+                Unique <span style={{ fontWeight: "500" }}>Word</span> letters 'check'
                 <input
                   type="checkbox"
                   checked={unique}
@@ -319,18 +374,28 @@ function App() {
             </div>
 
             <button
-              style={{
-                color: "orange",
-                marginTop: "60px",
-                fontSize: "14px",
-                letterSpacing: "0.04em",
-                padding: "4px",
-                fontWeight: "bold",
-              }}
+              style={styles.buttonPrimaryOne}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = "#502c2a")}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = "#3f1b1b")}
               onClick={getWord}
             >
-              {gameStarted || gameEnd ? "New Game" : "Start Game"}
+              {gameStarted || gameEnd ? "Retry @" : "Start Game"}
             </button>
+            <button
+              style={styles.buttonPrimaryOneSub}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = "#502c2a")}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = "#3f1b1b")}
+              onClick={() => {
+                resetGameState();
+                }
+              } disabled={!gameStarted && guesses.length === 0}
+            >
+              Reset
+            </button>
+
+              {gameStarted && !gameEnd && (
+                <p style={{ marginTop: " 20px" }} >Time: {(currentTime / 1000).toFixed(1)} s</p>
+              )}
 
             {/* just for testing, against the Word */}
             {/* {gameEnd && playerName && (
@@ -350,28 +415,23 @@ function App() {
               <input
                 type="text"
                 value={guess}
-                onChange={(e) => setGuess(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !gameEnd) {
+                onChange={e => setGuess(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === "Enter" && isGameActive) {
                     submitGuess();
                   }
                 }}
                 style={{ fontSize: "15px", paddingLeft: "6px", padding: "2px" }}
                 placeholder="Guess Word"
-                disabled={gameEnd}
+                disabled={!isGameActive}
               />
 
               <button
+                style={styles.buttonPrimaryTwo}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#502c2a")}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#3f1b1b")}
                 onClick={submitGuess}
-                disabled={gameEnd}
-                style={{
-                  color: "orange",
-                  marginLeft: "10px",
-                  fontSize: "14px",
-                  letterSpacing: "0.04em",
-                  padding: "4px",
-                  fontWeight: "bold",
-                }}
+                disabled={!isGameActive}
               >
                 Guess
               </button>
@@ -420,7 +480,12 @@ function App() {
 
             <div style={styles.grid}>
               {gridRows.map((guessRow, rowIndex) => (
-                <div key={rowIndex} style={styles.gridRow}>
+                <div key={rowIndex} 
+                style={{...styles.gridRow, 
+                border: rowIndex === guesses.length ? "2px solid #5a7070" : "none", 
+                padding: "4px", 
+                borderRadius: "4px"}}
+                >
                   {guessRow.map((item, index) => {
                     let bgColor = "transparent";
                     let border = "2px solid #3a3a3c";
