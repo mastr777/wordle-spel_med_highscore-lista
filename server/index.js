@@ -98,117 +98,8 @@ app.post("/api/highscore", async (req, res) => {
   }
 });
 
-app.get("/highscore", async (req, res) => {
-  try {
-    const highscores = await Highscore.find().sort({ timeMs: 1 }).limit(10);
-
+app.get("/about", (req, res) => {
     const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8" />
-      <title>Highscores</title>
-      <style>
-        html {
-          margin: 0 auto;
-          text-align: center;
-        }
-
-        body {
-          font-family: "Lucida Console", "Courier New", monospace;
-          font-size: 18px;
-          background: #191f24;
-          color: white;
-          padding: 20px;
-          letter-spacing: 0.04em;
-          width: 100%;
-          margin: 0 auto;
-        }
-
-        nav {
-          margin-bottom: 20px;
-        }
-
-        nav a {
-          color: white;
-          margin-right: 16px;
-          text-decoration: none;
-          font-size: 17px;
-          font-weight: bold;
-        }
-
-        table {
-          width: min(720px, 100%);
-          margin-top: 60px;
-          border-collapse: collapse;
-          background: #212b2e;
-          text-align: left;
-        }
-
-        th, td {
-          padding: 14px;
-          color: #bbefed;
-          letter-spacing: 0.05em;
-          font-size: 18px;
-          font-weight: normal;
-          border: 1px solid #111111;
-        }
-
-        h1 {
-          margin-top: 80px;
-          margin-bottom: 70px;
-          font-size: 34px;
-          font-weight: bold;
-        }
-        
-        .highscoreContainer {
-          width: min(740px, 100%);
-          min-height: 400px;
-          height: auto;
-          margin: 0 auto;
-        }
-      </style>
-    </head>
-
-        <body>
-          <nav>
-            <a href="/">Play</a>
-            <a href="/highscore">Highscore</a>
-            <a href="/about">About</a>
-          </nav>
-
-<div class="highscoreContainer">
-          <h1>Highscore List</h1>
-
-          <table border="1" cellpadding="8" cellspacing="0">
-            <tr>
-              <th>Name</th>
-              <th>Time</th>
-              <th>Guesses</th>
-              <th>Word length</th>
-              <th>Duplicate letters</th>
-            </tr>
-</div>
-            ${highscores
-              .map(
-                (score) => `
-                  <tr>
-                    <td>${score.name}</td>
-                    <td>${(score.timeMs / 1000).toFixed(1)} s</td>
-                    <td>${score.guesses.length}</td>
-                    <td>${score.wordLength}</td>
-                    <td>${score.allowDuplicateLetters ? "Yes" : "No"}</td>
-                  </tr>
-                `,
-              )
-              .join("")}
-          </table>
-        </body>
-      </html>
-    `;
-
-    app.get("/about", (req, res) => {
-      const html = `
       <!DOCTYPE html>
       <html>
       <head>
@@ -229,7 +120,7 @@ app.get("/highscore", async (req, res) => {
           color: #eeeeee;
           padding: 20px;
           letter-spacing: 0.04em;
-          width: 100%;
+          width: 90%;
           margin: 0 auto;
         }
 
@@ -344,6 +235,12 @@ app.get("/highscore", async (req, res) => {
               <p>Highscores sparas i MongoDB Atlas. Varje resultat innehåller spelarens namn, 
               tid (som millisekunder), alla gissningar, ordlängd och spelinställningar (icheck för dubbla bokstäver, eller inte).</p>
 
+              <p>Databas används för att lagra highscores. Databaskopplingen sker via en
+              så kallad environment variabel (.env fil), där anslutningssträngen lagras istället för att hårdkodas i koden.</p>
+
+              <p>Detta gör att känslig information som lösenord inte exponeras i projektet. För att möjliggöra anslutning under utveckling 
+              är databasen konfigurerad för att acceptera anslutningar från externa IP-adresser.</p>
+
               <h2>Highscorelista</h2>
               <p>Highscorelistan visas på en egen route (/highscore). Den sidan är serverside renderad, vilket innebär 
               att servern hämtar data från databasen, bygger upp HTML, och skickar en färdig sida ut till webbläsaren.</p>
@@ -367,8 +264,117 @@ app.get("/highscore", async (req, res) => {
         </html>
       `;
 
-      res.send(html);
-    });
+    res.send(html);
+});
+
+app.get("/highscore", async (req, res) => {
+  try {
+    const highscores = await Highscore.find().sort({ timeMs: 1 }).limit(10);
+
+    const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8" />
+      <title>Highscores</title>
+      <style>
+        html {
+          margin: 0 auto;
+          text-align: center;
+        }
+
+        body {
+          font-family: "Lucida Console", "Courier New", monospace;
+          font-size: 18px;
+          background: #191f24;
+          color: white;
+          padding: 20px;
+          letter-spacing: 0.04em;
+          width: 90%;
+          margin: 0 auto;
+        }
+
+        nav {
+          margin-bottom: 20px;
+        }
+
+        nav a {
+          color: white;
+          margin-right: 16px;
+          text-decoration: none;
+          font-size: 17px;
+          font-weight: bold;
+        }
+
+        table {
+          width: min(720px, 100%);
+          margin-top: 60px;
+          border-collapse: collapse;
+          background: #212b2e;
+          text-align: left;
+        }
+
+        th, td {
+          padding: 14px;
+          color: #bbefed;
+          letter-spacing: 0.05em;
+          font-size: 18px;
+          font-weight: normal;
+          border: 1px solid #111111;
+        }
+
+        h1 {
+          margin-top: 80px;
+          margin-bottom: 70px;
+          font-size: 34px;
+          font-weight: bold;
+        }
+        
+        .highscoreContainer {
+          width: min(740px, 100%);
+          min-height: 400px;
+          height: auto;
+          margin: 0 auto;
+        }
+      </style>
+    </head>
+
+        <body>
+          <nav>
+            <a href="/">Play</a>
+            <a href="/highscore">Highscore</a>
+            <a href="/about">About</a>
+          </nav>
+
+<div class="highscoreContainer">
+          <h1>Highscore List</h1>
+
+          <table border="1" cellpadding="8" cellspacing="0">
+            <tr>
+              <th>Name</th>
+              <th>Time</th>
+              <th>Guesses</th>
+              <th>Word length</th>
+              <th>Duplicate letters</th>
+            </tr>
+</div>
+            ${highscores
+              .map(
+                (score) => `
+                  <tr>
+                    <td>${score.name}</td>
+                    <td>${(score.timeMs / 1000).toFixed(1)} s</td>
+                    <td>${score.guesses.length}</td>
+                    <td>${score.wordLength}</td>
+                    <td>${score.allowDuplicateLetters ? "Yes" : "No"}</td>
+                  </tr>
+                `,
+              )
+              .join("")}
+          </table>
+        </body>
+      </html>
+    `;
 
     res.send(html);
   } catch (error) {
