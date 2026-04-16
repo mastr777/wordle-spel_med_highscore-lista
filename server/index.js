@@ -248,8 +248,8 @@ app.get("/about", (req, res) => {
               <h2>Informationssida</h2>
               <p>Denna sida, /about, är en statisk sida som beskriver projektet. Den använder ingen dynamisk data eller något API-anrop.</p>
 
-              <h2>Tekniker i projektet</h2>
-              <p>Följande verktyg har används för att skapa detta fullstack projekt:</p>
+              <h2>Tech stack</h2>
+              <p>Följande Tech stack och utvecklingsverktyg har används för att skapa detta fullstack projekt:</p>
 
               <ul>
                 <li>React (frontend)</li>
