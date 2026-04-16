@@ -118,14 +118,13 @@ app.get("/about", (req, res) => {
           font-weight: lighter;
           background: #191f24;
           color: #eeeeee;
-          padding: 20px;
           letter-spacing: 0.04em;
           width: 90%;
           margin: 0 auto;
         }
 
         nav {
-          margin-bottom: 20px;
+          margin-top: 26px;
         }
 
         nav a {
@@ -180,12 +179,19 @@ app.get("/about", (req, res) => {
 
         .textContainer {
           width: min(600px, 100%);
+          height: auto;
           text-align: left;
           padding-left: 110px;
           font-size: 18px;
           font-weight: lighter;
           letter-spacing: 0.04em;
           line-height: 135%;
+          margin-bottom: 120px;
+        }
+
+        .textSign {
+          opacity: 0.4;
+          padding: 20px 0 0 0;
         }
 
       </style>
@@ -199,64 +205,76 @@ app.get("/about", (req, res) => {
             </nav>
 
             <div class="aboutContainer">
-            <h1>About / Information</h1>
+              <h1>About / Information</h1>
 
             <div class="textContainer">
 
-            <p>Detta projekt är ett fullstack Wordle spel byggt med React, Node.js (Express) och MongoDB.</p>
-            <p>Målet har varit att återskapa grundidén i Wordle, genom att bygga en komplett applikation med frontend, 
-            backend och en highscorelista som sparas i en databas.</p>
+                <p>Detta projekt är ett fullstack Wordle-spel byggt med React, Node.js (Express) och MongoDB.</p>
+                <p>Målet har varit att återskapa grundidén i Wordle genom att bygga en komplett applikation med frontend, 
+                backend och en highscorelista som sparas i en databas.</p>
 
-            <h2>Hur spelet fungerar</h2>
-            <p>När användaren startar ett nytt spel hämtas ett slumpmässigt ord från servern.</p>
-            <p>Användaren kan välja:</p>
-              <ul>
-                <li>hur många bokstäver ordet ska ha</li>
-                <li>om det ska vara tillåtet med upprepade bokstäver</li>
-              </ul>
-              <p>Spelaren försöker sedan gissa ordet genom att skriva in gissningar.</p>
+                <h2>Hur spelet fungerar</h2>
+                <p>När användaren startar ett nytt spel hämtas ett slumpmässigt ord från servern.</p>
+                <p>Användaren kan välja:</p>
+                <ul>
+                  <li>hur många bokstäver ordet ska ha</li>
+                  <li>om det ska vara tillåtet med upprepade bokstäver</li>
+                </ul>
 
-            <p>Efter varje gissning får man feedback på varje bokstav.</p> 
-            <p>Grön = rätt bokstav på rätt plats, Gul = rätt bokstav men fel plats, 
-            och Röd = bokstaven finns inte med i ordet.</p>
+                <p>Spelaren försöker sedan gissa ordet genom att skriva in gissningar.</p>
 
-            <p>Spelet fortsätter tills:</p>
-              <ul>
+                <p>Efter varje gissning får man feedback på varje bokstav.</p> 
+                <p>Grön = rätt bokstav på rätt plats, Gul = rätt bokstav men fel plats, 
+                och Röd = bokstaven finns inte i ordet.</p>
+
+                <p>Spelet fortsätter tills:</p>
+                <ul>
                 <li>spelaren gissar rätt ord</li>
-                <li>eller max antal gissningar (5) är förbrukade</li>
-              </ul>
+                  <li>eller max antal gissningar (6) är förbrukade</li>
+                </ul>
 
-              <h2>Backend logik</h2>
-              <p>Backenden är byggd med Express och hanterar generering av slumpmässiga ord (/api/word), 
-              kontroll av gissningar och feedback (/api/guess), och sparande av highscores (/api/highscore).</p>
-              <p>Feedback-algoritmen jämför det gissade ordet med det rätta ordet och returnerar status för varje bokstav.</p>
+                <h2>Backend logik</h2>
+                <p>Backenden är byggd med Express och hanterar generering av slumpmässiga ord (/api/word), 
+                kontroll av gissningar och feedback (/api/guess), samt sparande av highscores (/api/highscore).</p>
 
-              <h2>Databasen</h2>
-              <p>Highscores sparas i MongoDB Atlas. Varje resultat innehåller spelarens namn, 
-              tid (som millisekunder), alla gissningar, ordlängd och spelinställningar (icheck för dubbla bokstäver, eller inte).</p>
+                <p>Feedback-algoritmen jämför det gissade ordet med det rätta ordet och returnerar status för varje bokstav.</p>
 
-              <p>Databas används för att lagra highscores. Databaskopplingen sker via en
-              så kallad environment variabel (.env fil), där anslutningssträngen lagras istället för att hårdkodas i koden.</p>
 
-              <p>Detta gör att känslig information som lösenord inte exponeras i projektet. För att möjliggöra anslutning under utveckling 
-              är databasen konfigurerad för att acceptera anslutningar från externa IP-adresser.</p>
+                <h2>Databasen</h2>
+                <p>Highscores sparas i MongoDB Atlas. Varje resultat innehåller spelarens namn, 
+                tid (i millisekunder), alla gissningar, ordlängd och spelinställningar (om dubbla bokstäver är tillåtna eller inte).</p>
 
-              <h2>Highscorelista</h2>
-              <p>Highscorelistan visas på en egen route (/highscore). Den sidan är serverside renderad, vilket innebär 
-              att servern hämtar data från databasen, bygger upp HTML, och skickar en färdig sida ut till webbläsaren.</p>
+                <p>Databasen används för att lagra highscores. Databaskopplingen sker via en
+                så kallad environment-variabel (.env-fil), där anslutningssträngen lagras istället för att hårdkodas i koden.</p>
 
-              <h2>Informationssida</h2>
-              <p>Denna sida, /about, är en statisk sida som beskriver projektet. Den använder ingen dynamisk data eller något API-anrop.</p>
+                <p>Detta gör att känslig information som lösenord inte exponeras i projektet. För att möjliggöra anslutning under utveckling 
+                är databasen konfigurerad för att acceptera anslutningar från externa IP-adresser.</p>
 
-              <h2>Tech stack</h2>
-              <p>Följande Tech stack och utvecklingsverktyg har används för att skapa detta fullstack projekt:</p>
+                <h2>Highscorelista</h2>
+                <p>Highscorelistan visas på en egen route (/highscore). Den sidan är server-side renderad, vilket innebär 
+                att servern hämtar data från databasen, bygger upp HTML och skickar en färdig sida till webbläsaren.</p>
 
-              <ul>
-                <li>React (frontend)</li>
-                <li>Node.js + Express (backend)</li>
-                <li>MongoDB Atlas (databas)</li>
-                <li>Visual Studio Code (kodning)</li>
-              </ul>
+                <h2>Informationssida</h2>
+                <p>Denna sida, /about, är en statisk sida som beskriver projektet. Den använder ingen dynamisk data eller något API-anrop.</p>
+
+
+                <h2>Tech stack</h2>
+                <p>Följande tekniker och verktyg har använts för att skapa detta fullstackprojekt:</p>
+
+                <ul>
+                  <li>React (frontend)</li>
+                  <li>Node.js + Express (backend)</li>
+                  <li>MongoDB Atlas (databas)</li>
+                  <li>Visual Studio Code (utvecklingsmiljö)</li>
+                </ul>
+
+                <h2>Slutord</h2>
+                <p>Genom detta projekt har jag fått en bättre förståelse för hur frontend och backend arbetar tillsammans, 
+                samt hur man kan lagra och hantera data i en databas.</p>
+
+                <p>Projektet har också gett mig insikt i hur man bygger upp en applikation från grunden och hur olika delar 
+                samverkar i ett fullstackprojekt.</p>
+                <p class="textSign">Mattias Strandberg</p>
 
               </div>
             </div>
@@ -288,14 +306,13 @@ app.get("/highscore", async (req, res) => {
           font-size: 18px;
           background: #191f24;
           color: white;
-          padding: 20px;
           letter-spacing: 0.04em;
           width: 90%;
           margin: 0 auto;
         }
 
         nav {
-          margin-bottom: 20px;
+          margin-top: 26px;
         }
 
         nav a {
