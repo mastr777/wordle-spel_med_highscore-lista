@@ -11,7 +11,7 @@ const styles = {
 
   container: {
 /*     backgroundColor: "#111214", */
-    marginTop: "0",
+    marginTop: "6px",
     padding: "5px",
     paddingBottom: "40px",
     borderRadius: "0",
@@ -22,7 +22,7 @@ const styles = {
 
   gameArea: {
     width: "min(660px, 100%)",
-    paddingTop: "11px",
+    paddingTop: "10px",
     height: "auto",
     margin: "0 auto",
     borderRadius: "9px",
@@ -67,7 +67,7 @@ const styles = {
     fontSize: "17px",
     lineHeight: "135%",
     fontWeight: "bold",
-    letterSpacing: "0.03em",
+    letterSpacing: "0.04em",
   },
 
   grid: {
@@ -329,7 +329,7 @@ function App() {
     <div style={styles.page}>
       <div style={styles.container}>
       <div style={styles.gameArea}>
-        <nav style={{ marginBottom: "20px", marginTop: "2px" }}>
+        <nav>
           <a href="/" style={styles.link}>
             Play
           </a>
