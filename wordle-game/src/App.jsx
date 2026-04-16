@@ -10,14 +10,24 @@ const styles = {
   },
 
   container: {
-    backgroundColor: "#111214",
-    marginTop: "16px",
+/*     backgroundColor: "#111214", */
+    marginTop: "0",
     padding: "5px",
     paddingBottom: "40px",
     borderRadius: "0",
     width: "740px",
     textAlign: "center",
     color: "white",
+  },
+
+  gameArea: {
+    width: "min(660px, 100%)",
+    paddingTop: "11px",
+    height: "auto",
+    margin: "0 auto",
+    borderRadius: "9px",
+    backgroundColor: "#111214",
+    paddingBottom: "40px",
   },
 
   input: {
@@ -318,6 +328,7 @@ function App() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
+      <div style={styles.gameArea}>
         <nav style={{ marginBottom: "20px", marginTop: "2px" }}>
           <a href="/" style={styles.link}>
             Play
@@ -538,6 +549,7 @@ function App() {
             </div>
           </div>
         </main>
+      </div>
       </div>
     </div>
   );
