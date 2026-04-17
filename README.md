@@ -1,8 +1,8 @@
 
 1 Klona projektet
 
-git clone <repo-url><br>
-cd <repo-namn>
+git clone https://github.com/mastr777/wordle-spel_med_highscore-lista.git
+cd wordle-spel_med_highscore-lista
 
 
 2 Frontend (React)
