@@ -8,6 +8,7 @@ const path = require("path");
 const words = require("./words");
 
 const app = express();
+app.use(express.json());
 const PORT = 5080;
 
 app.get("/api/word", (req, res) => {
@@ -88,6 +89,8 @@ app.get("/api/word", (req, res) => {
 
 app.post("/api/highscore", async (req, res) => {
   try {
+    console.log(req.body);
+
     const newScore = new Highscore(req.body);
     await newScore.save();
 
@@ -379,11 +382,11 @@ app.get("/highscore", async (req, res) => {
               .map(
                 (score) => `
                   <tr>
-                    <td>${score.name}</td>
-                    <td>${(score.timeMs / 1000).toFixed(1)} s</td>
-                    <td>${score.guesses.length}</td>
-                    <td>${score.wordLength}</td>
-                    <td>${score.allowDuplicateLetters ? "Yes" : "No"}</td>
+                    <td>${score.name || "Unknown"}</td>
+                    <td>${typeof score.timeMs === "number" ? (score.timeMs / 1000).toFixed(1) + " s" : "-"}</td>
+                    <td>${Array.isArray(score.guesses) ? score.guesses.length : "-"}</td>
+                    <td>${score.wordLength ?? "-"}</td>
+                    <td>${typeof score.allowDuplicateLetters === "boolean" ? (score.allowDuplicateLetters ? "Yes" : "No") : "-"}</td>
                   </tr>
                 `,
               )
@@ -400,7 +403,7 @@ app.get("/highscore", async (req, res) => {
   }
 });
 
-app.use(express.json());
+
 app.use(express.static(path.join(__dirname, "../wordle-game/dist")));
 
 app.get("/", (req, res) => {
