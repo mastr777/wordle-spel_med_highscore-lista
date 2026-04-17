@@ -1,21 +1,21 @@
 
 1 Klona projektet
 
-git clone <repo-url>
+git clone <repo-url><br>
 cd <repo-namn>
 
 
 2 Frontend (React)
 
--cd wordle-game
--npm install
--npm run build
+cd wordle-game<br>
+npm install<br>
+npm run build
 
 
 3 Backend (server)
 
--cd ../server
--npm install
+cd ../server<br>
+npm install
 
 Skapa en .env-fil i /server och lägg in:
 MONGODB_URI=<connection string>
