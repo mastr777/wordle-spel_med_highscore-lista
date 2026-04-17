@@ -1,7 +1,7 @@
 
 1 Klona projektet
 
-git clone https://github.com/mastr777/wordle-spel_med_highscore-lista.git
+git clone https://github.com/mastr777/wordle-spel_med_highscore-lista.git <br>
 cd wordle-spel_med_highscore-lista
 
 
