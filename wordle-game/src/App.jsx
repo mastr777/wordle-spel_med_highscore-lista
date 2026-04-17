@@ -347,7 +347,7 @@ function App() {
             minHeight: "700px",
             height: "auto",
             margin: "0 auto",
-            color: "#bbcbcd",
+            color: "#bbefed",
             letterSpacing: "0.02em",
           }}
         >
@@ -385,7 +385,7 @@ function App() {
 
             <div style={{ marginTop: "10px" }}>
               <span>
-                Unique <span style={{ fontWeight: "500" }}>Word</span> letters '<span style={{ color: "#dddddd" }}>check</span>'
+                Unique <span style={{ fontWeight: "500" }}>Word</span> letters (<span style={{ color: "#dddddd" }}>check</span>)
                 <input
                   type="checkbox"
                   checked={unique}
@@ -402,7 +402,7 @@ function App() {
                 onMouseLeave={(e) => (e.target.style.backgroundColor = "#4b2a2a")}
               onClick={getWord}
             >
-              {gameStarted || gameEnd ? "Retry @" : "Start Game"}
+              {gameStarted || gameEnd ? "Retry ↺" : "Start Game"}
             </button>
             <button
               style={styles.buttonPrimaryOneSub}
@@ -464,10 +464,10 @@ function App() {
                   style={{
                     fontSize: "15px",
                     padding: "4px",
-                    border: "solid 1px",
-                    borderColor: "#a8e2e3",
+                    border: "solid 2px",
+                    borderColor: "#86bab8",
                     outline: "none",
-                    borderRadius: "5px"
+                    borderRadius: "3px"
                   }}
                 />
 
@@ -512,7 +512,7 @@ function App() {
               {gridRows.map((guessRow, rowIndex) => (
                 <div key={rowIndex} 
                 style={{...styles.gridRow, 
-                border: rowIndex === guesses.length ? "2px solid #5a7070" : "none", 
+                border: rowIndex === guesses.length ? "2px solid #86bab8" : "none", 
                 padding: "4px", 
                 borderRadius: "4px"}}
                 >
