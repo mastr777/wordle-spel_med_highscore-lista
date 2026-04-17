@@ -89,7 +89,6 @@ app.get("/api/word", (req, res) => {
 
 app.post("/api/highscore", async (req, res) => {
   try {
-    console.log(req.body);
 
     const newScore = new Highscore(req.body);
     await newScore.save();
@@ -327,7 +326,7 @@ app.get("/highscore", async (req, res) => {
         }
 
         table {
-          width: min(720px, 100%);
+          width: min(790px, 100%);
           margin-top: 60px;
           border-collapse: collapse;
           background: #212b2e;
@@ -338,7 +337,7 @@ app.get("/highscore", async (req, res) => {
           padding: 14px;
           color: #bbefed;
           letter-spacing: 0.05em;
-          font-size: 18px;
+          font-size: 16px;
           font-weight: normal;
           border: 1px solid #111111;
         }
@@ -351,7 +350,7 @@ app.get("/highscore", async (req, res) => {
         }
         
         .highscoreContainer {
-          width: min(740px, 100%);
+          width: min(770px, 100%);
           min-height: 400px;
           height: auto;
           margin: 0 auto;
